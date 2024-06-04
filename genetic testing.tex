@@ -1,0 +1,531 @@
+\documentclass[12pt]{article}
+
+%**********************************************
+%* Add additional packages as needed
+
+\usepackage{url,amsmath,setspace,amssymb}
+\usepackage{listings}
+
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+
+\usepackage{color}
+\def\R{\color{red}}
+\def\B{\color{blue}}
+
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\usepackage{hyperref}
+%**********************************************
+%* Please replace this with your name and your AAU student number
+\newcommand{\studentname}{Massimo Calabrigo}
+\newcommand{\studentnumber}{12247382}
+
+
+
+%**********************************************
+%* Some more or less useful stuff, add custom stuff as needed
+
+\lstnewenvironment{myalgorithm}[1][] %defines the algorithm listing environment
+{
+   % \captionsetup{labelformat=algocaption,labelsep=colon}
+    \lstset{ %this is the stype
+        mathescape=true,
+        frame=none,
+        numbers=none,
+        basicstyle=\normalsize,
+        keywordstyle=\color{black}\bfseries\em,
+        keywords={,input, output, return, datatype, function, in, if, else, foreach, while, begin, end, },
+        numbers=left,
+        xleftmargin=.04\textwidth,
+        #1 % this is to add specific settings to an usage of this environment (for instance, the caption and referable label)
+    }
+}
+{}
+
+
+\newtcolorbox{alert}[1]{
+colback=red!5!white, colframe=red!75!white,fonttitle=\bfseries, title = #1}
+
+\newtcolorbox{commentbox}[1]{
+colback=black!5!white, colframe=black!75!white,fonttitle=\bfseries, title = #1}
+
+
+
+%**********************************************
+%* Leave the page configuration as is
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6.25in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+
+\newcommand{\heading}[5]{
+\renewcommand{\thepage}{#1\arabic{page}}
+\noindent
+\begin{center}
+	\framebox[\textwidth]{
+	\begin{minipage}{0.9\textwidth} \onehalfspacing
+	{\bf 650.010 -- \unitname} \hfill #2
+
+	{\centering \Large #5
+
+	}\medskip
+	{#3 \hfill #4}
+	\end{minipage}
+}
+\end{center}
+}
+
+\newcommand{\unitname}{Social, Ethical and Legal Aspects of Artificial Intelligence and Cybersecurity}
+%\newcommand{\maxpages}{5}
+\newcommand{\handout}[3]{\heading{#1}{#2}{\studentname}{\studentnumber}{#3}}
+
+%**********************************************
+%* The document starts here
+\begin{document}
+\handout{}{Summer Term, 2022/23}{The impact of genetic data on society and its effects}
+
+\tableofcontents
+
+\newpage
+\section{Introduction}
+"The sequence of the human genome would be perhaps the most powerful tool ever developed to explore the mysteries of human development and disease" - Leroy Hood, scientist working at the Human Genome Project \cite{human_genome_project} and creator of the first automated DNA sequencer \cite{leroy_hood_quote}\\
+\\
+The human genome project started in 1990 and lasted 12 years costing more than 3 billion dollars with the objective to sequence the whole human genome and use it to greatly improve medicine and disease prevention \cite{human_genome_project}\cite{rare_disease}\cite{understanding_genetics}. Not only 
+now we are able to full sequence DNA for 600 dollars in less than 3 weeks \cite{economy_genome}, but we have also discovered that we can identify behavioral traits like self-directedness, cooperativeness, or self-transcendence \cite{behavioral_genetics_nature}.\\
+This has profound social and ethical implications for the future of our data-based society; genetic data is a gold mine for AI algorithms and it's effects can range from cancer prevention \cite{understanding_genetics} to insurance discrimination \cite{genetic_data_misuse}. Our goal 
+is to clearly state problems about how our society understands genetics in both legal and social/ethical contexts, and formulate some suggestions aimed at improving the current understanding, preparing our society to a future where genetic data will be as common as biometric data.\\
+\\
+In section \ref{sec:intro} we introduce some basics about genetics necessary to understand what information can be extracted from a person DNA,
+ focussing the attention on the probabilistic nature of genetic testing results, which seems to be cause of much confusion \cite{genetic_literacy}. 
+ Then, in section \ref{sec:genetic_testing}, we address "Genetic Testing" , a set of techniques used to extrapolate information from genetic data that ranges from simple string comparisons to complex AI algorithms. 
+ We then proceed analyzing the economical aspects in section \ref{sec:economy}, in particular we will look at the growth of genetic testing from the Human Genome Project up to now, and in section \ref{sec:patent} we will look at the discussion 
+ about patenting genes.\\
+
+ In sections \ref{sec:literacy} and \ref{sec:discrimination} we will look at the social and ethical aspects: from the current awaness of the general public about genetics and it's effects, to the problem of genetic discrimination 
+ through the usage of advanced AI models.\\
+ In section \ref{sec:abuses} two disruptive examples of abuse of genetic data by both the Chinese and US governments are supplied, in section \ref{sec:anonymous} we will see why genetic data can't be treated as 
+ other types of personal data protected by current legislations, and in section \ref{sec:legal} current norms and regulations for US (GINA, ACA) and Europe (GDPR) are discussed.\\
+ \\
+ Finally, we will end with some recomendations on how to address a society in which genetic data is commonplace are made in section \ref{sec:conclusion}, and both positive and negative aspects of genetic testing and data are discussed.\\
+\newpage
+\section{Introduction to the human genome}
+\label{sec:intro}
+In this chapter we are going to introduce concepts as \emph{human genome}, \emph{chromosomes}, \emph{genes}, \emph{SNP} and \emph{genetic traits}, in order to better grasp how information is encoded and how it 
+can be extracted by algorithms.
+\subsection{The structure of human genome}
+The Human genome is a collection of 46 chromosomes, 23 inherited from the mother, 23 from the father. Chromosomes are contained inside the \emph{nucleulus}, an inner organule inside the \emph{nucleus} of every human cell, from neurons to cells in your mouth; even if 
+every single cell has a full copy of the genome. \\
+Each chromosome is composed by tangled chromatine and hystons, which are structures that enables information to be stored more densly, and chromatine is in turn composed by a double helix, also called 
+\emph{Deoxyribonucleic acid} or \emph{DNA} \ref{img:chromatin}.\\
+The basic units of information are the 4 bases that composes DNA, namely \emph{adenine} , \emph{cytosine} , \emph{thymine} or \emph{guanine} (A,C,T,G)\cite{understanding_genetics}. These bases are molecules 
+which works like pieces of a puzzle, and links as pairs, linking the two helixes which composes DNA (See Fig. \ref{img:chromatin}).\\
+\\
+There are around $3.2$ billion bases in the human genome \cite{understanding_genetics}, so a full genome sequence is roughly $725$ MB of data stored as strings of letters from the alphabet "A,C,T,G" \cite{genetic_data_misuse}, and 
+also it is interesting to note that about $1\%$-$2\%$ of the human genome is consideered composed of \emph{coding sequences}, that is sequences, also called \emph{protein-coding genes} that codes protein production. The rest of the human genome 
+is formed by highly repetitive sequences and is called \emph{non-coding}, and it is still debated whether or not this part of the genome is useless or not, but recent discussion seems to point toward assigning some function to it. \cite{non_coding}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=8cm]{chromatine_genome}
+    \caption{Chromosome structure. We can see that chromosomes are composed of chromatine and that hystons allows chromatine to maintain a dense structure}
+    \label{img:chromatin}
+\end{figure}
+
+
+\subsection{Genes and Genetic Diseases}
+Genes are subsequences of DNA and it is estimated there are between $20000$ and $25000$ genes in the whole human genome. 
+Genes are like cookbooks that can be read and copied, and most of them are used for protein production; these genes are copied by the \emph{mRNA}, and then brought to the \emph{ribosomes}, 
+ also called "factories of proteins", for proteins production.\\
+Although each cell contains a full complement of DNA, cells use genes selectively. For example a neuron will use a subset of genes different from a liver cell.\\
+\\
+Genetic diseases are mostly influenced by genes, that throught proteins determine the efficiency of metabolization of food, how toxins are eliminated, $\dots$\
+There are both harmful, and not harmful gene mutations:
+\begin{itemize}
+    \item single-nucleotide mutation (SNM): Harmful changes in genes, most commonly misspelling. For example, progeria, a disease which causes the patient to age much faster, is caused by a SNM, which causes the gene that encodes the information about protein "lamin" to encoding "lamin-a" instead, which in turn prevent the formation of the inner barrier of the \emph{nucleolus} \cite{understanding_genetics};
+    \item single-nucleotide polymorphism (SNP): Naturally occuring changes in genes that are part of what contraddistinct individuals, these changes are not harmful, for example genetic variants in a single gene account for the different blood types: A, B, AB, and O. A single individual can carry millions of SNP.
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=8cm]{SNP}
+    \caption{DNA mutations and polymorphisms. Changes in the DNA are usually not a threat, and may cause not noticeable effects. The most dangerous DNA mutations are the ones that affects genes responsible for protein production, like laminin-A which causes progeria \cite{understanding_genetics}}
+    \label{img:SNP}
+\end{figure}
+
+
+\subsection{Behavioral traits}
+Behavioral genetics is a strand of genetics that study the effect that genes have on people personality. Multiple studies that stated that the genetic part counted more than the enviromental part on the shaping of one's personality have been criticized, in fact, the scientific community seem to be more conservative \cite{personality_genetic}.\\
+A recent broad study gives a less conflictual result: behavioral traits around 30 to 60 percent heritable, depending on the type of trait \cite{behavioral_genetics_nature}.\\
+\\
+Knowing that behavioral traits are heritable does not mean that your personality is inherited too. Surely a predisposition toward "aggressivness" can skew ones personality toward violence, but it also depends on the enviroment on which one is grown and lives; as the study says the heritability does not go higher than 60 percent. It is also important to remark that behavioral traits are not fixed in stone, and that major life events and persistent intervantion can change them 
+as demonstrated by multiple psycological and neuroscientific studies \cite{personality_change}.
+
+\newpage
+\section{Genetic Testing}
+
+\emph{Full Genome Sequencing}, like the Human Genome Project \cite{human_genome_project} consists in reading the bases of every chromosome and storing it into a computer, enabling the application of different techniques and 
+algorithms collectively called \emph{Genetic Testing}. In this chapter we will take a look at the history of genetic testing and the figure of the genetic counsellor that is emerging in western democracies.\\
+\label{sec:genetic_testing}
+\subsection{History of genetic testing}
+Historically, the presence of genetic diseases was inferred using the inheritance law about genetic diseases inherited from the family \cite{understanding_genetics}, and the presence of symptoms that could be reconducted to that genetic disease or predisposition, for example multiple misscarriages, recurrent childhood death in the family or multiple family members suffering from cancer.\\
+After the human genome was sequenced, and it became more affordable, also genetic testing was added in the form of matching the string representing a patient gene, and the string representing an healthy gene. With this technique we were able to look for specific patterns in the DNA and check for mutations in genes responsible for the production of some protein which in turn caused some specific disease.\\
+In section \ref{sec:intro} we saw the example of progeria, it is estimated that over 300 million people in the world suffer from some form of a rare disease \cite{rare_disease}, 
+and the time necessary for a person to be correctly diagosticated is between 3 and 5 years in industrialized countries, greatly reducing life expectancy due to the fact these diseases gets worse with time if not treated.\\
+Genetic testing can also be used to predict the predisposition of some types of cancer, which, alike genetic diseases, if caught in time it's impact on a person's life can be greatly reduced. \cite{economy_genome}\
+Another strand regards genetic testing on embryons and fetus which are optional in the EU and USA legislations \cite{prenatal_testing}. Embryons stored with in-vitro techniques can be genetically tested to check for genetic diseases,
+ predispositions toward diseases, probability of misscariages, physical abnormities, $\dots$; in that case only the "healthier" embryon can be implanted on the mother womb. 
+ This technique only works on in-vitro embyons, but genetic testing can also be applied to fetus, which unbinds genetic testing from in-vitro techniques and allows it to be extended to natural pregnacies aswell. \cite{economy_genome}\\
+ \\
+ Another strand about genetic data usage is about precision medicine \cite{economy_genome}, which is a new school of thought which states that medicine should be tailored around an individual, 
+ because each person has different biological charateristics. Genetic testing links to precision medicine because it allows the emergence of new fields like "pharmacogenetics" 
+ that is assigning to each individual an exact dosage of medicines instead of the stands pills, based on both biometric and genetic data.
+
+
+\subsection{Genetic testing in the age of AI}
+As we have seen, historically genetic testing was able to use genetic data to discover predispositions and traits regarding possible diseases and health problems. \\
+Usually determining the causal effect between a genetic mutation and a genetic effect followed the following process:
+\begin{enumerate}
+    \item individuation of a common genetic mutation in patients sharing a certain predisposition or disease
+    \item laboratory tests and studies are conducted on a sample of patients to ascertain what exactly that gene mutation modifies with respect to a non-mutated gene
+    \item a study is published, toghether with an analysis of the causal relations between mutation and disease
+\end{enumerate}
+Individuation of genetic traits like "aggressivness" or "introvertness" are much harder to analyze because genetic traits are much more complex, less understood and difficult to measure \cite{behavioral_genetics_nature}.\\
+This is where artificial intelligence (AI) steps in, by feeding genetic data to large algorithms it will be possible to look for complex patterns, linking a specific behavioral trait to some genetic sequence without the need of uncovering 
+the precise biological effects that that mutation causes to the organism in order to produce that effect.\\
+Of course, this approach creates ethical problems, for example are we sure that the algorithms will learn the correct linkage between a genetic sequence and a predisposition, as it was amply dimostrated this is not always the case.\\
+In the cases where AI uncover correct relashionships we have to remember that behavioral traits are composed of aa enviromental and a genetic part, and that the latter determine from $30\%$ to $60\%$ of a person trait \cite{behavioral_genetics_nature}, depending in the trait.\\
+\\
+Modern AI represents a step forward for genetic testing, it can be used both to look for more complex cancer predispositions or genetic diseases, or to predict predisposition toward crime based on ethnical and geographical location by using genetic data toghether with biometric and web navigation data, 
+its uses must be regulated in order to avoid discrimination as we will see in section \ref{sec:legal}, but it is also an instrument that could lead to saving many lives.
+
+\subsection{Genetic Counsellors and Direct-to-consumer companies}
+Genetic counselors are professional figures trained in genetics which helps a patient or a family interpret genetic famility history and genetic data \cite{understanding_genetics}, 
+their purpose is to present difficult to comprehend patterns and results about a person's genome into clear and easy to comprehend information, 
+and to propose changes in the lifestyle in order to minimize the probability of contracting some disease the patient is predisposed toward or other healthcare professionals 
+in order to treat genetic diseases the patient may have.\\
+Genetic counselors are also tasked with reducing a patient anxieties toward the results of an exam, and to give the patient psychosocial tools to cope with these results, 
+in fact, genetic counsellors follows a patient for multiple sessions and do not tell patients what to do, but take a non-directive stance and support the patient's decisions, so they act as intermediaries.\\
+In the last session genetic counsellors gives patients a document containing the major topics discussed, and the patient can decide whether to share it with third parties or not.\\
+\\
+Given that the exam results are not deterministic, but always involves some probability or predisposals,
+it is highly suggested for a patient to sequence and analyze its genome thought a genetic counsellor, otherwise that patient may not be able to understand the results,
+and feel emotional distress and economic consequences \cite{understanding_genetics}.\\
+\\
+Nowadays also private companies like 23AndMe \cite{23andme} are offering both sequencing and genome data analysis, in this case 
+a patient is given access to a web page which summarize pharmacogenetics, cancer predisposal, ancestry, allergies and other genetic-related traits.\\
+The problem with direct-to-consumer companies is that the patient is given a lot of information and few instruments to interpret it, possibly leading to a wrong interpretation 
+and an inadequate response. The problem of interpreting correctly genetic data is also compounded by the low level of genetic literacy in our society, of which we will talk about in 
+section \ref{sec:literacy}, that is people who are missing the basic concepts we explained in section \ref{sec:intro}.
+
+\newpage
+\section{Economy and value of genetic data in the long term}
+\label{sec:economy}
+\subsection{Economic value of genetic testing}
+As we can see in Fig. \ref{img:cost_growth}, direct-to-consumer companies are gaining more and more value, and the reduction in cost of genome sequencing is getting cheaper faster than 
+the moore law.\\
+Based on current estimates, the global genomic sequencing market is expected to grow from its previous $10.7\$$ billion valuation in 2018 to $37.7\$$ billion by 2026. 
+Thus the genetic testing market is predicted to experience a compound annual growth rate of $19.1\%$ for 2021-2026. \cite{economy_genome}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=14cm]{cost_growth}
+    \caption{On the left economical growth of direct-to-consumer genetic sequencing companies, on the right reduction in cost for full genome sequencing from 2001 to 2020}
+    \label{img:cost_growth}
+\end{figure}
+
+\subsection{Major companies and lobbying}
+Gordon Thomas Honeywell is a lobbying company, that represents the interests of big corporations in the US goverment. In a presentation in the HIDS conference in 2016, a Gordon Thomas Honeywell
+ proposed that DNA databases should also come to the democracies of the world, praising saudia arabia and african dictatorships like Qatar for being so advanced in the development of mass genetic databases and describing parlamentary discussions and protests as "hurdles" \cite{fischer_honeywell}.\
+The fact is that Gordon Thomas Honeywell represents Thermo Fischer, the second biggest DNA sequencing company by revenue \cite{big_companies}.\\
+Thermo Fischer produces DNA sequencing machines, 
+and saw how much profitable was mass surveillance when in 2017 saw that more than 10 percent of their revenews came from China. \cite{china_fischer}\\
+Thermo Fischer is an example of the danger that can come when genetic testing technology is applied by a government in order to obtain a mass surveillance state. We will see more about its relashionships with China in section \ref{sec:abuses}.
+\newpage
+\section{Gene Patents}
+\label{sec:patent}
+In this chapter we will talk about patents for genetic testing techniques. Broadly speaking, both in EU and US, patenting genes occuring in nature is forbidden, 
+but it is possible to patent genetically modified genes at certein conditions.
+\subsection{Patents in Europe}
+In Europe genes patent have not been allowed since 1998, with the European Union directive 98/44/EC \cite{directive_98_44} the concept of \emph{biological material} was defines as 
+as any material containing genetic information and capable of reproducing itself or being reproduced in a biological system. \cite{patent}\\
+By Biotech Directives biological material that is isolated from its natural environment 
+or produced by means of a technical process may be the subject of an invention, even if it previously occurred in nature. \cite{patent}\\
+\\
+\subsection{Patents in US}
+Until 2013 genes could be patented in the USA, but in the case of the \emph{Myriad case}, 
+the Supreme Court of the United States ruled that human genes cannot be patented in the U.S. because DNA is a "product of nature" \cite{patent}.\\
+ The Court decided that because nothing 
+new is created when discovering a gene, there is no intellectual property to protect, so patents cannot be granted. Prior to this ruling, 
+more than $4300$ human genes were patented. The Supreme Court's decision invalidated those gene patents, making the genes accessible for research and for commercial genetic testing. \cite{genetic_discrimination}\cite{patent}\\
+Differently from Europe, the Myriad case also banned patents on insolated biological material stating that "nothing new and useful is created when a gene is located/discovered or simply isolated" \cite{patent}.\\
+\\
+\subsection{Differences on EU-US patents}
+Europe and USA legislations are not much dissimilar, in both cases patents duration is capped at 20 years, and in both legislations artificial DNA constructs (cDNA) and sequences altered by humans remain patentable, as they are not naturally found in nature. \cite{patent}\\
+USA patents legislation is slighly more strict tha EU, banning patents on genes recreated in isolated enviroment make it so some patents could be valid in Europe but not in USA.
+\\
+\newpage
+
+\section{Genetic Literacy}
+\label{sec:literacy}
+In this chapter we will see how the general public and the judicial systems are aware of the basic genetics concepts we introduced in section \ref{sec:intro}.\\
+\subsection{Literacy}
+In 2022 a study was conducted for estimating genetic literacy \cite{genetic_literacy}, that is the knowledge about genetic-related concepts.
+ The population comprised 2023 individuals, that were asked to state both their perceived familiarity with concepts like "chromosome", "gene", "mutations", 
+ and also some specific questions about the genome (See Fig. \ref{img:genetic_questions}).\\
+The results showed that genetic literacy has not yet been achieved, but this study also noted that confronted with their results from 2013 with the same set of questions,
+ showed a $10\%$ increase in accuracy, hinting that genetic literacy is slowly increasing.\\
+ \\
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=14cm]{genetic_questions}
+    \caption{The questions ranges from hard questions like "How many genes are estimated to be present in the human genome?" to easy quesions like "Are genes diseases?". We can see the aaccuracy is around $45\%$ for the easy questions, and $80\%$ for the hard questions}
+    \label{img:genetic_questions}
+\end{figure}
+Genetic literacy will be essential in the future in the judicial system. Because genetic data can give a predispositions toward traits like "aggressivness",
+ that could lead a judge to impose harsher than necessary conditions to the defendant or create other unjust situations based on ignorance about genetics from the judge and lawyers sides \cite{genetic_data_misuse}, 
+ also, ignorance about genomics from the part of legislators has been signaled as the main barrier toward the global implementation of genomic medicine \cite{global_genomic_medicine}, 
+which includes \emph{pharmacogenetics} and many disease prevention techniques.\\
+\\
+From studies about genetic literacy \cite{genetic_literacy} and cases in the judicial systems \cite{genetic_data_misuse} it emerges the lacking of knowledge about genetics, which is both 
+a problem for the application of new medical practises \cite{global_genomic_medicine} and the right of not being discriminated.\\
+A study published in 2019 in the \emph{Legal Issues Journal UK} proposes to both promote education among the general population and 
+introduce genomic education for lawyers and judges as part of their professional development programmes, also in their law degree. \cite{genetic_data_misuse}
+
+
+\newpage
+\section{Genetic Discrimination}
+\label{sec:discrimination}
+In this section we will see the discriminating effects genetical testing and genetic data could have on society, and remind that genetic discrimination is already here using 
+the example of a boy which was banned from school due to a predisposal toward a genetic disease.\\
+In section \ref{sec:abuses} we will take a look at genetic discriminations performed by governments at a massive scale which are already present in both US and China.
+\subsection{Disclosure of a person genome reveals information about its family}
+The predictive nature of genetic information allows prediction of genetic traits for the extended family, or even a whole community (we will say that genetic data holds the property of \emph{estensibility}), for this reason it raises unique social issues \cite{understanding_genetics}.
+
+Sharing genetic information with one own's family has a series of social consequences: 
+unaffected spouses may view their partners differently, siblings of children with special needs may see themselves ignored by the parents or \cite{understanding_genetics}.\\
+Genetic testing performed on a person could also reveal predisposal toward genetic diseases which affects also family members, hence posing the problem of whether to reveal this information or not.\\
+Genetic Testing can also affect a community at large, in the past genetics have been used to discriminate based on race or ethicity, 
+with the result that already marginalized communities would see genetic practises such as prenatal diagnosis screening as an instrument to seclude them even more, hence refusing them 
+and regating themselves also the positive healthcare effects.\\
+Some other community, like the deaf community, have a different view on what they treat as a positive or a negative genetic trait,
+ and would feel discriminated if deafness would be simply categorized as negative trait. \cite{genetic_data_misuse}\\
+
+\subsection{Genetic discrimination and its effects}
+Genetic discrimination occurs when people are treated differently by their employer or insurance company because they have a gene mutation that causes or increases the risk 
+of an inherited disorder. Fear of discrimination is a common concern among people considering genetic testing. \cite{genetic_discrimination_GINA}\\
+\\
+A worrisome usage of genetic data in the commercial setting is its usage for hiring processes. Given that the DNA results are probabilistic, above all the behavioral ones, it isn't a given that the best person for a role would be selected. Moreover, this 
+fatalistic view it imposes on the society could have unexpected consequences on the people psychology, imposing constraints on capable people that don't have the best gene selection,
+ hence it would increase discrimination without really giving the certainty of having selected the best candidate for a job.\\
+ \\
+Also another source of discrimination sprouts from the fact that the genetic traits linked to anti-social behavior are highly inheritable \cite{genetic_data_misuse}, which means that a state could store that data and use it to predict the likelyhood of an individual committing a crime,
+ acting as the enviromental factor which will only further increase the likelyhood of that person being a criminal, and becoming the main source influencing this outcome.\\
+
+\subsection{Genetic discrimination in school}
+Genetic data could also be used for augmenting streaming in schools, which is a process that consists in examining students in order to group them in classes with similar abilities, 
+and a lot of literature argues that streaming would not really improve learning, but just creates disadvantages for many students. \cite{streaming_school}\\
+An example of genetic discrimination in school already happened, a boy in california was expelled because he has a genetic predisposition to cystic fibrosis \cite{school_kicked_out}. The boy was expelled 
+because two sibling with cystic fibrosis were already present in the boy middle school, and given that kids with the inherited lung disease can't be near each other because they're vulnerable to contagious infections, 
+the school direction decided to expell the boy even if he didn't have the disease, but was just predisposed toward it.
+
+
+
+\newpage
+\section{Governments abuse of genetic data}
+\label{sec:abuses}
+\subsection{China: a huge male genetic databases is being built without citizens consent}
+Chinese government is building a huge DNA database containing only male DNA, which is already 80 million strong and 
+its stated objective is to catch criminals and the police says that they obtain DNA samples from voluntary subjects. \cite{china_collect_dna}\\
+Some officials within China, as well as human rights groups outside its borders, warn that a national DNA database could invade privacy and tempt officials to punish the relatives of dissidents
+ and activists. Rights activists argue that the collection is being done without consent because citizens living in an authoritarian state have virtually no right to refuse.\\
+\\
+There is some opposition to this program: Wang Ying, an official from Beijing, said that when the technology reached a certain scale, 
+the government needed to protect the rights of users “in a timely manner”, however due to the highly centralized structure of the chinese communist party and the demand of a minimum threshold 
+of DNA samples from the central authorities, it is to be expected that local party leaders would simply ask for the material, without further explainations as Mr. Jiang, 
+a computer scientist that lives in Beijing says: "all our information is with them already"\cite{china_collect_dna}.
+
+\subsection{China: Uighurs crime prediction based on genes}
+Uighurs are a muslim minority group in China, from 2015 the chinese government held them in an iron grip, with the objective of assimilating them, 
+reducing by force the frequency of revolts, and instead of using the army and violence, China chose to use modern technology and to create a mass surveillance state. \cite{china_fischer}\\
+\\
+The mass surveillance state was enabled by modern AI tools, in particular computer vision but also genetic data, in fact between 2016 and 2017, China used \emph{Thermo Fischer} machines 
+to fetch the genetic data of 36 million people, in order to use it as materialfor machine learning algorithms. \\
+Also, China contributed to a public catalogue of genes "1000 Genomes Project", which is supposed to contain only DNA from willigly and informed patients, with other 2000 Uighurs DNA \cite{china_fischer}.\\
+\\
+In 2017, one week before the start of the DNA collection program, a Thermo Fischer researcher, Dr. Zhong Chang, 
+said at a conference in Beijing that the company could help in identifying specific ethic related genetical traits which could be found on Uighurs and tibetans \cite{china_collect_dna}, but in 
+2019 Thermo Fischer was forced by the US government to cease selling medical requipment to China as part of the sanctions that US inposed on China for the Uighurs concentration camps, however recently it was discovered that Xinjiang police force is still buying DNA machines from the US company. \cite{china_uighurs}\\
+
+
+\newpage
+\section{Genetic Data: differences with other types of personal data}
+\label{sec:anonymous}
+In this section we will see what contraddistint genetic data from other types of personal data. We saw the first difference in section \ref{sec:discrimination}, that is 
+genetic data reveals not only information about a person, but an entire family. A second relevant difference regards the impossibility to anonymize genetic data. \cite{anonymization}
+\subsection{Anonymization is not possible for genetic data}
+In a 2013 study by \emph{LAURA L. RODRIGUEZ} published on \emph{Science} \cite{anonymization}, it was found that it was possible to use genetic data available in public genetic databases combined with more 
+general information like age and state of residency to link a sequenced anonymized genome in a public database to an individual with high probability, so 
+data that is granted to research institutions under the clauses of anonymization, specified by both US and EU regulations \cite{genetic_discrimination}\cite{genetic_discrimination_GINA}\cite{genetic_data_misuse}, is not really anonymous and could be used to identify a 
+person, and consequently identifying also its extended family. We will say that genetic data holds the property of \emph{un-anonymization} \\
+\\
+Given that the current legislation allow a person to anonymize the data \cite{genetic_data_misuse}\cite{genetic_discrimination}, but not always to delete the data itself, for example in the case where data is used for reseach purposes, 
+ the anonimyzed data isn't really anonymous, even after removing the additional information.\\
+\\
+The dangers of letting genetic data roaming free, even in its anonymized form, are only compounded by data breaches being so common: 
+there have been 4,145 publicly disclosed breaches that exposed over $22$ billion records in $2021$ \cite{data_breaches}, and once the genetic data is out, even if it is anonymized, 
+it can be used to track a single person nonetheless and then it can be used to predict behavioral traits or genetic diseases of that person or extended family.
+
+\newpage
+\section{Current laws regulating genetic data and genetic testing}
+\label{sec:legal}
+\subsection{\emph{GINA} and \emph{ACA}}
+In USA we have 2 laws protecting genetic data: \emph{GINA} (Genetic Information Nondiscriminatory Act) and \emph{ACA} (Affordable care act).\
+\emph{GINA} prohibits and employer to seek an employee genetic material, but the former is allowed to ask to the latter for its genetic material for "voluntary wellness programs", 
+and although the employee can refuse, compliance is often rewarded with benefits for partecipants such as reductiong in health insurance cost, and non-partecipants are punished. \cite{genetic_data_misuse} 
+In addition, given that health insurances payed by private companies to an emplyee often extends to the employee's family, also the partner can be asked for its genetic material.\\
+\\
+\emph{ACA} prohibits adjustment of premiums based on genetic material, however \emph{ACA} allows the usage of geographical data of residance and age, 
+making a loophole to be exploited due to the correlation between geographical area of residence and genetic information. \cite{geographic_genetic_correlations}\\
+Currently the judicial system doesn't seem to be aware of the importance of genetic data \cite{genetic_literacy}, 
+as we can see on the court case in which an insurance company denied to pay for breast-ovarian cancer treatment to a customer on the excuse that that type of cancer was "not an illness, 
+but a genetically based condition" \cite{genetic_data_misuse}.
+
+\subsection{\emph{GDPR}}
+Europe provide the most advanced data protection law up to now: the General data protection regulation (\emph{GDPR}).\\
+The General Data Protection Regulation of the European Union, states in the preamble that 
+"The protection of natural persons in relation to the processing of personal data is a fundamental right".\\
+Privacy is also consideered a fundamental right in both European Convention of Human Rights 1953 (Article 8) and the European Charter of Fundamental Rights 2000.\\
+\\
+Even if \emph{GDPR} is the most advanced regulation protecting genetic data, it is not devoid of flaws.\\
+Article 9 is the most problematic because it lists a number of exceptions on the handling of genetic data with the aim of supporting research, 
+for example it is possible for EU genetic data to be sent outside the member states, even to countries that does not adhere to the same standards of the GDPR in terms of privacy when 
+"the requirements in this Regulation relating to transfers subject to appropriate safeguards, including binding corporate rules, 
+and derogations for specific situations are fulfilled” (Recital 107 of the \emph{GDPR})"\cite{article9}.\\
+\\
+Another problem of Article 9 is the possibility of member states to "maintain or introduce further conditions, including limitations". \cite{article9}\\
+For example in UK The Health Service (Control of Patient Information) Regulations 2002, require that in England and Wales, data be disclosed without patient consent for purposes, 
+such as: to diagnose risks to public health, recognise trends in such risks, control and prevent the spread of risks and monitor and manage the delivery, 
+efficacy and safety of immunization programmes. \cite{genetic_data_misuse}
+
+\subsection{Genetic Data: Problems in current legislations}
+\emph{GDPR} tries to both protect citizens privacy and enable research, the problem here being that \emph{GDPR} assumes that anonimyzed data can be used for reseach without the risk of a person being 
+identified by that data, hence protecting privacy, but as we have seen this is not the case for genetic data. \cite{anonymization}
+Also, data breaches are very common \cite{data_breaches} and can be used to infer information about one's extended family \cite{understanding_genetics}\cite{genetic_discrimination_GINA},
+making "genetic data used for reseach" and "privacy" are mutually exclusive.\\
+\\
+More than protecting the genetic data itself, it is the usage that should be regulated. Given the availability of mass genetic data sharing throught cloud computing \cite{genetic_data_misuse},
+data breaches \cite{data_breaches}, and possible usage of genomic data to identify traits of the extended famility \cite{understanding_genetics}\cite{genetic_discrimination_GINA} it is almost impossible to ensure genomic data privacy.\\
+Also, given the importance that big AI systems have, it becomes difficult for a person to state if it is being discriminated, 
+because genomic data can go around for research purposes and through data breaches, commercial AI models could be trained on that data without the person being aware its genomic data
+is being used for such a purpose.
+
+\newpage
+\section{Addressing genetic data abuse on the AI era}
+\label{sec:conclusion}
+Genetic data is fast becoming more and more important due to reduction in costs of genome sequencing and the increasing power of AI \cite{economy_genome}, but many people doesn't seem aware of that 
+yet and this can cause emotional or economic distress in case a person chooses to entrust its genetic data to a private company, which assumes their customer have some knowledge about 
+genetics and can interpret genetic information by themselves \cite{23andme}.\\
+Fortunately the public unawareness toward genetics is decreasing. Genetic literacy has been improving for the last decade \cite{genetic_literacy}, also, new professions like the \emph{genetic counsellor} are becoming more rooted, and will be tasked with 
+translating difficult genetic information to patients.\\
+\\
+Genetic data is very different from other types of personal data because it holds the properties of \emph{un-anonymization} \cite{anonymization} and \emph{estendibility} \cite{understanding_genetics} that the 
+other types of data are missing, making current privacy protecting legislations unfit to completely regulate it without modifications. In fact, we suggest to "organize interdisciplinary teams to draft specific legislations" \cite{genetic_data_misuse}, 
+in order to understand better how to regulate all applications of genetic information, focussing on the ones driven by AI.\\
+\\
+Making genetic data as private as other types of data is almost impossible due to it's properties, so we suggest to focus more on imposing constraints on the information we extract from it 
+through genetic testing, more than trying to limit the circulation of that type of data toward research-only enviroments. \cite{genetic_data_misuse}\\
+\\
+Genetic information has many applications on the medical field: from \emph{prenatal testing} \cite{prenatal_testing} to \emph{disease prevention} \cite{understanding_genetics}, but it can be used 
+also to increase discrimination, either based on predispositions toward diseases \cite{school_kicked_out} or by applying \emph{behavioral genetics} and trying to predict crimes based on the genome of a 
+single person \cite{china_collect_dna} or even a whole population \cite{china_collect_dna}, enacting so \emph{genetic discrimination} practises.\\
+For these reasons it is necessary to "train relevant stakeholders on basic genetic findings" \cite{genetic_data_misuse}, and more generally raising genetic 
+awareness to the general public.\\
+\\
+
+
+
+
+\newpage
+\section{Bibliography}
+\begin{thebibliography}{10}
+\bibitem{human_genome_project}
+\href{https://www.genome.gov/human-genome-project}{The Human Genome Project}
+\bibitem{economy_genome}
+\href{https://www3.weforum.org/docs/WEF_An_Economic_Analysis_of_the_Value_of_Genetic_Testing_2021.pdf}{An Economic Analysis of the value of Genetic Testing - World Economic Forum 2021}
+\bibitem{rare_disease}
+\href{https://www.weforum.org/agenda/2019/05/rare-diseases-arent-rare-but-treatments-for-them-are-its-time-to-change-that}{I have a rare disease. This is my hope for the future of medicine - World Economic Forum}
+\bibitem{behavioral_genetics_nature}
+\href{https://www.nature.com/articles/s41380-018-0263-6}{Uncovering the complex genetics of human character - Nature}
+\bibitem{understanding_genetics}
+\href{https://www.ncbi.nlm.nih.gov/books/NBK115568/}{Understanding Genetics: A New York, Mid-Atlantic Guide for Patients and Health Professionals - Genetic Alliance}
+\bibitem{genetic_data_misuse}
+\href{https://www.legalissuesjournal.com/wp-content/uploads/2019/01/Selita-Genetic-Data-Misuse-Risk-to-Fundamental-Human-Rights-in-Developed-Economies.pdf}{GENETIC DATA MISUSE: RISK TO FUNDAMENTAL HUMAN RIGHTS IN DEVELOPED ECONOMIES - 2019 - Legal Issues Journal UK}
+\bibitem{leroy_hood_quote}
+\href{https://en.wikipedia.org/wiki/Leroy_Hood}{Leroy Hood - Wikipedia}
+\bibitem{genetic_literacy}
+\href{https://pubmed.ncbi.nlm.nih.gov/36417915/}{Understanding changes in genetic literacy over time and in genetic research participants - PubMed}
+\bibitem{genetic_discrimination}
+\href{https://www.genome.gov/about-genomics/policy-issues/Genetic-Discrimination}{Genetic Discrimination - US National human genome Research Institute}
+\bibitem{genetic_discrimination_GINA}
+\href{https://medlineplus.gov/genetics/understanding/testing/discrimination}{Genetic Discrimination and GINA - MedlinePlus}
+\bibitem{patent}
+\href{https://www.taylorwessing.com/synapse/ti-patenting-gene-sequences.html}{Patenting of gene and protein sequences: an EU and US perspective - Josie Miller}
+\bibitem{streaming_school}
+\href{https://www.researchgate.net/publication/297661889_The_effects_of_streaming_in_the_secondary_school_on_learning_outcomes_for_Australian_students_-_A_review_of_the_international_literature}{The effects of streaming in the secondary school on learning outcomes for Australian students - A review of the international literature - Olivia Johnston}
+\bibitem{school_kicked_out}
+\href{https://www.wired.com/2016/02/schools-kicked-boy-based-dna}{DNA Got a Kid Kicked Out of School—And It'll Happen Again}
+\bibitem{directive_98_44}
+\href{https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex%3A31998L0044}{Directive 98/44/EC - EUR-Lex}
+\bibitem{fischer_honeywell}
+\href{https://www.thermofisher.com/content/dam/LifeTech/Documents/PDFs/6-Tim-Schellberg.pdf}{Gordon Thomas Honeywell presentation: Here they come}
+\bibitem{china_fischer}
+\href{https://www.nytimes.com/2019/02/21/business/china-xinjiang-uighur-dna-thermo-fisher.html}{China Uses DNA to Track Its People, With the Help of American Expertise - The New York Times}
+\bibitem{china_uighurs}
+\href{https://www.nytimes.com/2021/06/11/business/china-dna-xinjiang-american.html}{China Still Buys American DNA Equipment for Xinjiang Despite Blocks - The New York Times}
+\bibitem{china_collect_dna}
+\href{https://www.nytimes.com/2020/06/17/world/asia/China-DNA-surveillance.html}{China Is Collecting DNA From Tens of Millions of Men and Boys, Using U.S. Equipment - The New York Times}
+\bibitem{usa_collect_dna}
+\href{https://www.federalregister.gov/documents/2020/03/09/2020-04256/dna-sample-collection-from-immigration-detainees}{DNA-Sample Collection From Immigration Detainees - Federal Register}
+\bibitem{genome_sequence_cost}
+\href{https://3billion.io/blog/whole-genome-sequencing-cost-2023}{Whole Genome Sequencing cost 2023 - 3 Billion blog}
+\bibitem{data_breaches}
+\href{https://www.securitymagazine.com/articles/97046-over-22-billion-records-exposed-in-2021}{Over 22 billion records exposed in 2021 - Security Magazine}
+\bibitem{global_genomic_medicine}
+\href{https://pubmed.ncbi.nlm.nih.gov/26041702}{Global implementation of genomic medicine: We are not alone - PubMed}
+\bibitem{article9}
+\href{https://gdpr-info.eu/art-9-gdpr/}{GDPR article 9}
+\bibitem{should_dna_sequenced}
+\href{https://innovations.stanford.edu/student-feature/should-you-get-your-genome-sequenced/}{Should you get your genome sequenced? - Stanford Healthcare Innovative Lab}
+\bibitem{prenatal_testing}
+\href{https://my.clevelandclinic.org/health/diagnostics/24136-pregnancy-genetic-testing}{Prenatal Genetic Testing - Cleveland}
+\bibitem{personality_genetic}
+\href{https://www.verywellmind.com/are-personality-traits-caused-by-genes-or-environment-4120707}{Is Personality Genetic? - VeryWellMind}
+\bibitem{personality_change}
+\href{https://www.universityofcalifornia.edu/news/can-you-change-your-personality}{Can you change your personality? - University of California}
+\bibitem{impact_discrimination}
+\href{https://www.apa.org/news/press/releases/stress/2015/impact}{The impact of discrimination - American Psycological Association}
+\bibitem{geographic_genetic_correlations}
+\href{https://www.nature.com/articles/s41588-022-01158-0}{Gene–environment correlations across geographic regions affect genome-wide association studies - Nature}
+\bibitem{chromatin}
+\href{https://en.wikipedia.org/wiki/Chromatin}{Chromatin}
+\bibitem{non_coding}
+\href{https://en.wikipedia.org/wiki/Non-coding_DNA}{Non-coding DNA}
+\bibitem{23andme}
+\href{https://www.23andme.com/}{23AndMe}
+\bibitem{big_companies}
+\href{https://www.biospace.com/article/top-10-gene-sequencing-companies-by-revenue}{Top 10 DNA-Sequencing companies - BioSpace}
+\bibitem{anonymization}
+\href{https://www.science.org/doi/abs/10.1126/science.1229566}{Identifying Personal Genomes by Surname Inference - Science}
+\end{thebibliography}
+
+\end{document}
+
+
+
